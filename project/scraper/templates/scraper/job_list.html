@@ -1,0 +1,71 @@
+{% extends "scraper/base.html" %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="mb-4">Find Jobs in India</h1>
+    
+    <form method="POST" class="mb-4">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-md-6">
+                <input type="text" name="search_term" class="form-control" 
+                       placeholder="Job title (e.g. Python Developer)" 
+                       value="{{ request.POST.search_term }}">
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="location" class="form-control" 
+                       placeholder="Location (e.g. Bangalore)" 
+                       value="{{ request.POST.location|default:'India' }}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </div>
+    </form>
+
+    {% if jobs %}
+    <div class="alert alert-info">
+        Showing jobs from: 
+        {% for platform in platforms %}
+        <span class="badge bg-secondary me-1">{{ platform }}</span>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        {% for job in jobs %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 job-card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ job.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ job.company }}</h6>
+                    <p class="card-text">
+                        <i class="fas fa-map-marker-alt"></i> {{ job.location }}<br>
+                        <span class="badge bg-primary">{{ job.source }}</span>
+                        {% if job.salary %}
+                        <br><i class="fas fa-rupee-sign"></i> {{ job.salary }}
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="card-footer bg-white">
+                    <a href="{{ job.url }}" target="_blank" class="btn btn-sm btn-success">
+                        <i class="fas fa-external-link-alt"></i> Apply
+                    </a>
+                    <a href="{% url 'job_detail' job.pk %}" class="btn btn-sm btn-info">
+                        <i class="fas fa-info-circle"></i> Details
+                    </a>
+                    <small class="text-muted float-end">
+                        {% comment %} Posted: {{ job.posted_date|date:"M d, Y" }} {% endcomment %}
+                        Posted: {{ job.posted_date }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        No jobs found. Try different search terms.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

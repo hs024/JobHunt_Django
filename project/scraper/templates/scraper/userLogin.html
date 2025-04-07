@@ -1,0 +1,18 @@
+{% extends "scraper/base.html" %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="username">username</label><br>
+        <input type="text" name="username"><br><br>
+        {% comment %} <label for="email">email</label><br>
+        <input type="email" name="email" id=""><br> {% endcomment %}
+        <label for="password">password</label>
+        <input type="password" name="password" id="">
+        <a href="{% url 'job_list' %}">
+            <button type="submit">submit</button>
+
+        </a>
+    </form>
+{% endblock content %}
+    

@@ -1,0 +1,35 @@
+{% extends "scraper/base.html" %}
+
+{% block title %}{{ job.title }} | JobHunt{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h2>{{ job.title }}</h2>
+        <h4>{{ job.company }}</h4>
+    </div>
+    <div class="card-body">
+        <p><strong>Location:</strong> {{ job.location }}</p>
+        <p><strong>Source:</strong> <span class="badge bg-primary">{{ job.source }}</span></p>
+        {% if job.salary %}
+        <p><strong>Salary:</strong> {{ job.salary }}</p>
+        {% endif %}
+        
+        <div class="mt-4">
+            <h5>Job Description:</h5>
+            <p>{{ job.description|linebreaks }}</p>
+        </div>
+        
+        {% if job.skills %}
+        <div class="mt-4">
+            <h5>Skills:</h5>
+            <p>{{ job.skills|linebreaks }}</p>
+        </div>
+        {% endif %}
+    </div>
+    <div class="card-footer">
+        <a href="{{ job.url }}" target="_blank" class="btn btn-primary">Apply on {{ job.source }}</a>
+        <a href="{% url 'job_list' %}" class="btn btn-secondary">Back to Listings</a>
+    </div>
+</div>
+{% endblock %}
